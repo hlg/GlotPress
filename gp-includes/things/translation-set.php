@@ -105,7 +105,12 @@ class GP_Translation_Set extends GP_Thing {
 		if ( !isset( $this->current_count ) ) $this->update_status_breakdown();
 		return $this->current_count;
 	}
-
+	
+	function touched_count() {
+		if ( !isset( $this->touched_count ) ) $this->update_status_breakdown();
+		return $this->touched_count;
+	}
+	
 	function warnings_count() {
 		if ( !isset( $this->warnings_count ) ) $this->update_status_breakdown();
 		return $this->warnings_count;
@@ -150,6 +155,7 @@ class GP_Translation_Set extends GP_Thing {
 			}
 		}
 		$this->untranslated_count = $this->all_count() - $this->current_count;
+		$this->touched_count = GP::$translation->value_no_map("SELECT COUNT(*) from (select t.original_id from $t t where t.translation_set_id=%d group by t.original_id) tct", $this->id);
 	}
 
 	/**

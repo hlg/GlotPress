@@ -111,6 +111,7 @@ class GP_Router {
 		) );
 	}
 
+			"get:/$project/$locale/-stats" => array('GP_Route_Project', 'stats'),
 
 	function route() {
 		$real_request_uri = $this->request_uri();

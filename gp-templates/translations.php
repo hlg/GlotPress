@@ -118,8 +118,8 @@ $i = 0;
 		$default_sort = GP::$user->current()->get_meta('default_sort');
 		if ( ! is_array($default_sort) ) {
 			$default_sort = array(
-				'by' => 'priority',
-				'how' => 'desc'
+				'by' => 'references',
+				'how' => 'asc'
 			);
 		}
 

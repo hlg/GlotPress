@@ -69,15 +69,15 @@ class GP_Translation extends GP_Thing {
 
 		$join_type = 'INNER';
 
-		$sort_bys = array('original' => 'o.singular %s', 'translation' => 't.translation_0 %s', 'priority' => 'o.priority %s, o.date_added DESC',
+		$sort_bys = array('original' => 'o.singular %s', 'translation' => 't.translation_0 %s', 'priority' => 'o.priority %s, o.references ASC',
 			'random' => 'o.priority DESC, RAND()', 'translation_date_added' => 't.date_added %s', 'original_date_added' => 'o.date_added %s',
-			'references' => 'o.references' );
+			'references' => 'o.references %s' );
 
 		$default_sort = GP::$user->current()->get_meta('default_sort');
 		if ( ! is_array($default_sort) ) {
 			$default_sort = array(
-				'by' => 'priority',
-				'how' => 'desc'
+				'by' => 'references',
+				'how' => 'asc'
 			);
 		}
 

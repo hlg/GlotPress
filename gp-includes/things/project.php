@@ -24,6 +24,21 @@ class GP_Project extends GP_Thing {
 		return $sub_projects;
 	}
 
+	function all_sub_projects() {
+		// return $this->sub_projects();
+		return $this->recurse_sub_projects();
+	}
+
+	function recurse_sub_projects() {
+		$result = array($this);
+		$this->sub_projects = array();
+		foreach( $this->sub_projects() as $sp ){
+			$this->subprojects[] = $sp;
+			$result = array_merge($result, $sp->recurse_sub_projects());
+		}
+		return $result;
+	}
+
 	function top_level() {
 		$projects = $this->many( "SELECT * FROM $this->table WHERE parent_project_id IS NULL ORDER BY name ASC" );
 		$projects = apply_filters( 'projects', $projects, 0 );

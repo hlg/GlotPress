@@ -10,14 +10,19 @@ if ( 0 == $per_page )
 $default_sort = GP::$user->current()->get_meta('default_sort');
 if ( ! is_array($default_sort) ) {
 	$default_sort = array(
-		'by' => 'priority',
-		'how' => 'DESC'
+		'by' => 'references',
+		'how' => 'asc'
 	);
 }
 ?>
 <h2><?php _e( "Profile" ); ?></h2>
 <form action="" method="post">
 	<table class="form-table">
+		<tr>
+			<th><label for="pass"><?php _e("Change password:"); ?></label></th>
+			<td><input type="password" id="pass" name="pass" /> new password
+			<br/><input type="password" id="passrep" name="passrep" /> repeat password</td>
+		</tr>
 		<tr>
 			<th><label for="per_page"><?php _e( "Number of items per page:" ); ?></label></th>
 			<td><input type="number" id="per_page" name="per_page" value="<?php echo $per_page ?>"/></td>

@@ -53,7 +53,8 @@ function gp_url_add_path_and_query( $base, $path, $query ) {
 	// todo: same domain with current url?
 	$url = gp_url_join( $base, $path );
 	if ( $query && is_array( $query ) )
-		$url = add_query_arg( urlencode_deep( $query ), $url );
+		// $url = add_query_arg( urlencode_deep( $query ), $url );
+                $url .= '?' . http_build_query($query);
 	elseif ( $query )
 		$url .= '?' . ltrim( $query, '?' );
 	return apply_filters( 'gp_url_add_path_and_query', $url, $base, $path, $query );

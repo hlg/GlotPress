@@ -137,7 +137,14 @@ class GP_User extends GP_Thing {
 		return gp_delete_meta( $this->id, $key, '', 'user' );
 	}
 
-
+	function set_password( $pass ) {
+		global $wp_users_object;
+		// global $wp_auth_object;
+		$wp_users_object->set_password( $pass, $this->id );
+		// $wp_auth_object->clear_auth_cookie();
+		// $wp_auth_object->set_auth_cookie($this->id);
+	}
+	
 	function reintialize_wp_users_object() {
 		global $gpdb, $wp_auth_object, $wp_users_object;
 		$wp_users_object = new WP_Users( $gpdb );

@@ -86,6 +86,8 @@ class GP_Translation extends GP_Thing {
 		$sort_how = gp_array_get( $sort_hows, gp_array_get( $sort, 'how' ), gp_array_get( $sort_hows, $default_sort['how'] ) );
 
 		$where = array();
+                $latest_join = '';
+
 		if ( gp_array_get( $filters, 'term' ) ) {
 			$like = "LIKE '%" . ( $gpdb->escape( like_escape ( gp_array_get( $filters, 'term' ) ) ) ) . "%'";
 			$where[] = '(' . implode( ' OR ', array_map( lambda('$x', '"($x $like)"', compact('like')), array('o.singular', 't.translation_0', 'o.plural', 't.translation_1', 'o.context', 'o.references' ) ) ) . ')';
@@ -110,6 +112,9 @@ class GP_Translation extends GP_Thing {
 		if ( 'yes' == gp_array_get( $filters, 'with_comment' ) ) {
 			$where[] = 'o.comment IS NOT NULL AND o.comment <> ""';
 		}
+                if ( 'yes' == gp_array_get( $filters, 'latest_only' ) ){
+                        $latest_join = "join (select original_id as oid, max(date_added) as last from ".$gpdb->translations." group by oid) ss on ss.oid=o.id and ss.last=t.date_added ";
+                }
 
 		if ( gp_array_get( $filters, 'user_login' ) ) {
 			$user = GP::$user->by_login( $filters['user_login'] );
@@ -161,7 +166,7 @@ class GP_Translation extends GP_Thing {
 			SELECT SQL_CALC_FOUND_ROWS t.*, o.*, t.id as id, o.id as original_id, t.status as translation_status, o.status as original_status, t.date_added as translation_added, o.date_added as original_added
 		    FROM $gpdb->originals as o
 		    $join_type JOIN $gpdb->translations AS t ON o.id = t.original_id AND t.translation_set_id = ".$gpdb->escape($translation_set->id)." $join_where
-		    WHERE o.project_id = ".$gpdb->escape( $project->id )." AND o.status LIKE '+%' $where ORDER BY $sql_sort $limit";
+		    $latest_join WHERE o.project_id = ".$gpdb->escape( $project->id )." AND o.status LIKE '+%' $where ORDER BY $sql_sort $limit";
 		$rows = $this->many_no_map( $sql_for_translations );
 		$this->found_rows = $this->found_rows();
 		$translations = array();

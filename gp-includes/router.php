@@ -79,6 +79,8 @@ class GP_Router {
 			"get:/$project/-branch" => array('GP_Route_Project', 'branch_project_get'),
 			"post:/$project/-branch" => array('GP_Route_Project', 'branch_project_post'),
 
+			"get:/$project/$locale/-stats" => array('GP_Route_Project', 'stats'),
+
 			"get:/$projects" => array('GP_Route_Project', 'index'),
 			"get:/$projects/-new" => array('GP_Route_Project', 'new_get'),
 			"post:/$projects/-new" => array('GP_Route_Project', 'new_post'),
@@ -92,6 +94,7 @@ class GP_Router {
 			// keep this below all URLs ending with a literal string, because it may catch one of them
 			"get:/$set" => array('GP_Route_Translation', 'translations_get'),
 			"post:/$set" => array('GP_Route_Translation', 'translations_post'),
+
 
 			// keep this one at the bottom of the project, because it will catch anything starting with project
 			"/$project" => array('GP_Route_Project', 'single'),
@@ -111,7 +114,6 @@ class GP_Router {
 		) );
 	}
 
-			"get:/$project/$locale/-stats" => array('GP_Route_Project', 'stats'),
 
 	function route() {
 		$real_request_uri = $this->request_uri();

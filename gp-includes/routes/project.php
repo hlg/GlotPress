@@ -39,18 +39,22 @@ class GP_Route_Project extends GP_Route_Main {
 		$project = GP::$project->by_path( $project_path );
 		$s_original_count = 0;
 		$s_touched_count = 0;
+                $s_current_count = 0;
 		if( !$project ) gp_tmpl_404();
 		$all_sub_projects = $project->all_sub_projects();
 		foreach( $all_sub_projects as $sub_project ){
 			$sp_set = GP::$translation_set->by_project_id_slug_and_locale( $sub_project->id, "default", $locale );
 			$sub_project->original_count = GP::$original->count_by_project_id( $sub_project->id);
 			$sub_project->touched_count = $sp_set->touched_count();
+                        $sub_project->current_count = $sp_set->current_count();
 			$sub_project->percent_status = sprintf( _x( '%d%%', 'language translation percent' ), $sub_project->original_count ? $sub_project->touched_count / $sub_project->original_count * 100 : 0 );
 			$s_original_count += $sub_project->original_count;
 			$s_touched_count += $sub_project->touched_count;
+                        $s_current_count += $sub_project->current_count;
 			// $all_sub_projects[] = array("pname" => $sub_project->name, "finished" => $sp_set->percent_translated());
 		}
-		$s_percent_status = sprintf(_x('%d%%','language translation percent'), $s_original_count ? $s_touched_count / $s_original_count * 100 : 0);
+		$s_percent_status = sprintf(_x('%d%%','language translation percent'), $s_original_count ? ($s_touched_count-$s_current_count) * 100 / $s_original_count : 0);
+		$s_percent_current = sprintf(_x('%d%%','language translation percent'), $s_original_count ? $s_current_count * 100 / $s_original_count : 0);
 		$full_locale_name = GP_Locales::by_slug($locale)->english_name;
 		$this->tmpl( 'project-stats', get_defined_vars() );
 	}

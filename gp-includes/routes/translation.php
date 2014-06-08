@@ -170,9 +170,9 @@ class GP_Route_Translation extends GP_Route_Main {
 				if ( isset( $translations[$i] ) ) $data["translation_$i"] = $translations[$i];
 			}
 
-			if ( $this->can( 'approve', 'translation-set', $translation_set->id ) || $this->can( 'write', 'project', $project->id ) )
-				$data['status'] = 'current';
-			else
+			// if ( $this->can( 'approve', 'translation-set', $translation_set->id ) || $this->can( 'write', 'project', $project->id ) )
+			//	$data['status'] = 'current';
+			// else
 				$data['status'] = 'waiting';
 
 			$original = GP::$original->get( $original_id );

@@ -113,7 +113,8 @@ class GP_Translation extends GP_Thing {
 			$where[] = 'o.comment IS NOT NULL AND o.comment <> ""';
 		}
                 if ( 'yes' == gp_array_get( $filters, 'latest_only' ) ){
-                        $latest_join = "join (select original_id as oid, max(date_added) as last from ".$gpdb->translations." group by oid) ss on ss.oid=o.id and ss.last=t.date_added ";
+                        $latest_join = "join (select original_id as oid, max(date_added) as last from ".$gpdb->translations." group by oid) ss on ss.oid=o.id";
+                        $where[] = "(ss.last is null or ss.last = t.date_added)";
                 }
 
 		if ( gp_array_get( $filters, 'user_login' ) ) {
